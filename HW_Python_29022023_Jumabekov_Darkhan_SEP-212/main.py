@@ -1,0 +1,72 @@
+'''
+1. Найти все трехзначные простые числа. (Определить функцию,
+позволяющую распознавать простые числа.)
+'''
+
+
+def prime_number(number):
+    return all(number % i != 0 for i in range(2, number)) and len(str(number)) == 3
+
+
+def print_prime_numbers():
+    numbers = range(0, 1000)
+    for number in numbers:
+        if prime_number(number):
+            print(number)
+
+
+'''
+2. Даны два натуральных числа. Выяснить, в каком из них сумма цифр
+больше. (Определить функцию для расчета суммы цифр натурального
+числа.) 
+'''
+
+
+def calc_natural_number_sum(natural_number):
+    sum = 0
+    for num in range(len(str(natural_number))):
+        sum += num
+    return sum
+
+
+def compare_natural_numbers_sum():
+    a = int(input('Введите первое натуральное число: '))
+    b = int(input('Введите второе натуральное число: '))
+
+    sum_a = calc_natural_number_sum(a)
+    sum_b = calc_natural_number_sum(b)
+    if sum_a > sum_b:
+        print(f'сумма цифр больше в числе {a}')
+    else:
+        print(f'сумма цифр больше в числе {b}')
+
+
+'''
+3. В списке получить все шестизначные счастливые номера. Счастливым
+называют такое шестизначное число, в котором сумма его первых трех
+цифр равна сумме его последних трех цифр. (Определить функцию для
+расчета суммы цифр трехзначного числа.)
+Пример объявления списка:
+myList = [333444, 1123345, 443344]
+'''
+
+
+def calc_sum_numbers(numbers):
+    sum = 0
+    for number in list(str(numbers)):
+        sum += int(number)
+    return sum
+
+
+def is_lucky_ticket():
+    lucky_tickets = [333441, 112334, 112334, 315333, 112334, 112310, 443344]
+    for ticket in lucky_tickets:
+        first_part = calc_sum_numbers(ticket // 1000)
+        second_part = calc_sum_numbers(ticket % 1000)
+        print(f'Билет {ticket} счастливый?: {first_part == second_part}')
+
+
+if __name__ == '__main__':
+    print_prime_numbers()
+    # compare_natural_numbers_sum()
+    # is_lucky_ticket()

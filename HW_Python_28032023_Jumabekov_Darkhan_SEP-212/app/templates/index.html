@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Продукты</title>
+      <link rel="stylesheet" href="./static/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>Продукты</h1>
+    <table style="width: auto;" class="table table-hover mx-auto">
+    <thead>
+        <tr>
+            <th>Наименование</th>
+            <th>Описание</th>
+            <th>Производитель</th>
+            <th>Цена</th>
+            <th>Магазин</th>
+        </tr>
+    </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{product.name}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.manufacturer}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.store}}</td>
+            </tr>
+            {% empty %}
+            Sorry, no product left today :(
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>

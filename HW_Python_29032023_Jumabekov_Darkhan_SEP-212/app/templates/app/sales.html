@@ -1,0 +1,96 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+  <table style="width: auto;" class="table table-hover mx-auto">
+
+        <tr>
+            <th> ID </th>
+            <th> Публикации </th>
+            <th> Дата </th>
+            <th> Цена одной книги </th>
+            <th> Количество проданных книг </th>
+            <th> Общая стоимость проданных книг </th>
+        </tr>
+
+        <!-- Строки таблицы -->
+        {% for sale in sales %}
+        <tr>
+            <td> {{ sale.id }} </td>
+            <td> {{ sale.publications.book.name }} </td>
+            <td> {{ sale.date }} </td>
+            <td> {{ sale.price_for_one }} </td>
+            <td> {{ sale.count }} </td>
+            <td> {{ sale.total_price_for_all }} </td>
+            <td>
+                <button class="btn btn-sm btn-danger" onclick="delete_sale({{ sale.id }})">удалить</button>
+            </td>
+        </tr>
+      {% empty %}
+      Продаж пока нет :(
+      {% endfor %}
+    </table >
+
+<h3 style="margin-top: 60px">Добавить продажу</h3>
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+<!--    <div class="mb-3">-->
+<!--      <label for="publication" class="form-label">Публикация</label>-->
+<!--      <select name="publication" id="publication" class="form-control">-->
+<!--        {% for publication in publications %}-->
+<!--            <option value={{publication.id}}>{{publication.book.name}}</option>-->
+<!--          {% endfor %}-->
+<!--      </select>-->
+<!--  </div>-->
+
+<!--  <div class="mb-3">-->
+<!--      <label for="date" class="form-label">Дата</label>-->
+<!--      <input name="date" type="date" class="form-control" id="date">-->
+<!--  </div>-->
+<!--    <div class="mb-3">-->
+<!--      <label for="count" class="form-label">Количество проданных книг</label>-->
+<!--      <input name="count" type="number" class="form-control" id="count" value="0" required>-->
+<!--  </div>-->
+
+<!--    <div class="mb-3">-->
+<!--      <label for="price_for_one" class="form-label">Цена одной книг</label>-->
+<!--      <input name="price_for_one" type="number" class="form-control" id="price_for_one" value="0" required>-->
+<!--  </div>-->
+
+<!--    <div class="mb-3">-->
+<!--      <label for="total_price_for_all" class="form-label">Общая стоимость проданных книг</label>-->
+<!--      <input name="total_price_for_all" type="number" class="form-control" id="total_price_for_all" readonly>-->
+<!--  </div>-->
+
+  <button style="margin-top: 10px" type="submit" class="btn btn-primary">Добавить</button>
+</form>
+
+<script>
+        const delete_sale = (sale_id) => {
+            const result = confirm("Удалить продажу " + sale_id + "?");
+            if (result === true) {
+                const url = "/delete_sale/"+sale_id;
+                window.location = url;
+            }
+        }
+        const total_price_for_all = document.getElementById('id_total_price_for_all')
+
+        document.getElementById('id_price_for_one').addEventListener('input', function(){
+            if(this.value < 0){this.value = 0}
+            total_price_for_all.value = +this.value * +document.getElementById('id_count').value
+        });
+
+        document.getElementById('id_count').addEventListener('input', function(){
+            if(this.value < 0){this.value = 0}
+           total_price_for_all.value = +this.value * +document.getElementById('id_price_for_one').value
+        });
+
+        document.getElementById('id_date').value = new Date().toISOString().split('T')[0];
+
+
+</script>
+
+
+{% endblock %}

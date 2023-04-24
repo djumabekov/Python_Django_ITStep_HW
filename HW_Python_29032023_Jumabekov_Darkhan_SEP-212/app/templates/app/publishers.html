@@ -1,0 +1,49 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+  <table style="width: auto;" class="table table-hover mx-auto">
+
+        <tr>
+            <th> ID </th>
+            <th> Название издательства </th>
+        </tr>
+
+        <!-- Строки таблицы -->
+        {% for publisher in publishers %}
+        <tr>
+            <td> {{ publisher.id }} </td>
+            <td> {{ publisher.name }} </td>
+            <td>
+                <button class="btn btn-sm btn-danger" onclick="delete_publisher({{ publisher.id }})">удалить</button>
+            </td>
+        </tr>
+      {% empty %}
+      Издательств пока нет :(
+      {% endfor %}
+    </table >
+
+<h3 style="margin-top: 60px">Добавить издательство</h3>
+<form method="post">
+    {% csrf_token %}
+        {{form.as_p}}
+<!--  <div class="mb-3">-->
+<!--   <label for="name" class="form-label">Название издательства</label>-->
+<!--   <input name="name" type="text" class="form-control" id="name" required>-->
+<!--  </div>-->
+  <button style="margin-top: 10px" type="submit" class="btn btn-primary">Добавить</button>
+</form>
+
+<script>
+        const delete_publisher = (publisher_id) => {
+            const result = confirm("Удалить издательство " + publisher_id + "?");
+            if (result === true) {
+                const url = "/delete_publisher/"+publisher_id;
+                window.location = url;
+            }
+        }
+    </script>
+
+
+{% endblock %}

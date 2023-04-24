@@ -1,0 +1,54 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+  <table style="width: auto;" class="table table-hover mx-auto">
+
+        <tr>
+            <th> ID </th>
+            <th> Название книги </th>
+            <th> Жанр </th>
+            <th> Год написания </th>
+            <th> Автор </th>
+        </tr>
+
+        <!-- Строки таблицы -->
+        {% for book in books %}
+        <tr>
+            <td> {{ book.id }} </td>
+            <td> {{ book.name }} </td>
+            <td> {{ book.genre }} </td>
+            <td> {{ book.write_date }} </td>
+            <td> {{ book.author.FIO }} </td>
+            <td>
+                <button class="btn btn-sm btn-danger" onclick="delete_book({{ book.id }})">удалить</button>
+            </td>
+        </tr>
+      {% empty %}
+      Книг пока нет :(
+      {% endfor %}
+    </table >
+
+<h3 style="margin-top: 60px">Добавить книгу</h3>
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+  <button style="margin-top: 10px" type="submit" class="btn btn-primary">Добавить</button>
+</form>
+
+<script>
+        const delete_book = (book_id) => {
+            const result = confirm("Удалить книгу " + book_id + "?");
+            if (result === true) {
+                const url = "/delete_book/"+book_id;
+                window.location = url;
+            }
+        }
+
+                document.getElementById('write_date').value = new Date().toISOString().split('T')[0];
+
+    </script>
+
+
+{% endblock %}

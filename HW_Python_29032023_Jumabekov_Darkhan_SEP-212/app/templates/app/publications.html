@@ -1,0 +1,85 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+  <table style="width: auto;" class="table table-hover mx-auto">
+
+        <tr>
+            <th> ID </th>
+            <th> Издательство </th>
+            <th> Книга </th>
+            <th> Дата </th>
+            <th> Тираж </th>
+        </tr>
+
+        <!-- Строки таблицы -->
+        {% for publication in publications %}
+        <tr>
+            <td> {{ publication.id }} </td>
+            <td> {{ publication.publisher.name }} </td>
+            <td> {{ publication.book.name }} </td>
+            <td> {{ publication.date }} </td>
+            <td> {{ publication.count }} </td>
+            <td>
+                <button class="btn btn-sm btn-danger" onclick="delete_publication({{ publication.id }})">удалить</button>
+            </td>
+        </tr>
+      {% empty %}
+      Публикаций пока нет :(
+      {% endfor %}
+    </table >
+
+<h3 style="margin-top: 60px">Добавить публикацию</h3>
+<form action="/publications/" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+<!--    <div class="mb-3">-->
+<!--      <label for="publisher" class="form-label">Издательство</label>-->
+<!--      <select name="publisher" id="publisher" class="form-control">-->
+<!--        {% for publisher in publishers %}-->
+<!--            <option value={{publisher.id}}>{{publisher.name}}</option>-->
+<!--          {% endfor %}-->
+<!--      </select>-->
+<!--  </div>-->
+
+<!--    <div class="mb-3">-->
+<!--      <label for="book" class="form-label">Книга</label>-->
+<!--      <select name="book" id="book" class="form-control">-->
+<!--        {% for book in books %}-->
+<!--            <option value={{book.id}}>{{book.name}}</option>-->
+<!--          {% endfor %}-->
+<!--      </select>-->
+<!--  </div>-->
+
+<!--  <div class="mb-3">-->
+<!--      <label for="date" class="form-label">Дата</label>-->
+<!--      <input name="date" type="date" class="form-control" id="date">-->
+<!--  </div>-->
+
+<!--    <div class="mb-3">-->
+<!--      <label for="count" class="form-label">Тираж</label>-->
+<!--      <input name="count" type="number" class="form-control" id="count" required>-->
+<!--  </div>-->
+
+  <button style="margin-top: 10px" type="submit" class="btn btn-primary">Добавить</button>
+</form>
+
+<script>
+        const delete_publication = (publication_id) => {
+            const result = confirm("Удалить публикацию " + publication_id + "?");
+            if (result === true) {
+                const url = "/delete_publication/"+publication_id;
+                window.location = url;
+            }
+        }
+
+          document.getElementById('count').addEventListener('input', function(){
+            if(this.value < 0){this.value = 0}
+        });
+                document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+    </script>
+
+
+{% endblock %}
